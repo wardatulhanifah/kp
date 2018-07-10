@@ -38,4 +38,13 @@ class User extends Authenticatable
             return $this->hasOne(Tendik::class, 'id', 'id');
         }
     }
+
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class);
+    }
+
+    /*public function kp(){
+        return $this->hasOne(Mahasiswa::class, 'id', 'id');
+    }*/
 }

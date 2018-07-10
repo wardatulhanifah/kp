@@ -17,6 +17,9 @@
                 <a class="nav-link" href="{{ route('instansi.index') }}">
                     <i class="nav-icon icon-people"></i> Kelola Instansi
                 </a>
+                <a class="nav-link" href="{{ route('dosen.index') }}">
+                    <i class="nav-icon icon-people"></i> Kelola Dosen
+                </a>
             </li>
         </ul>
     </nav>

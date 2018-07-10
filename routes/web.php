@@ -1,5 +1,5 @@
 <?php
-
+ 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,6 +36,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('instansi', 'InstansiController');
     Route::resource('dosen','DosenController');
+    Route::resource('proposal','ProposalController');
+    // Route::get('registrasi','ProposalController@isidata')->name('registrasi.create');
+    // Route::post('registrasi','ProposalController@storedata')->name('registrasi.storedata');
+    Route::resource('harian','KegiatanHarianController');
+    // Route::get('kegiatan_harian','KegiatanHarianController@create')->name('kegiatan_harian.create');
 });
 
 Route::get('image/{type}/{id}', 'FileController@image')->name('get.image');

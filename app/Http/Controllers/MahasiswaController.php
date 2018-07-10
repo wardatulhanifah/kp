@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 // use Illuminate\Http\File;
 
 use App\User;
-use Image;
+use Image; 
 use File;
 
 class MahasiswaController extends Controller

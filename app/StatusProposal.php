@@ -4,12 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Instansi extends Model
+class StatusProposal extends Model
 {
-    protected $table = 'instansi';
+     protected $table = 'status_proposal';
 
-    public function instansi()
+    public function proposal()
     {
         return $this->hasMany(Proposal::class);
     }
+
 }
