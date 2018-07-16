@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\KegiatanHarian;
 use App\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +19,16 @@ class KegiatanHarianController extends Controller
     {
             $user = Auth::user();       
             $kegiatan_harians = KegiatanHarian::paginate(10);
-            return view('mahasiswa.kegiatanharian.index_harian', compact('kegiatan_harians', 'user'));
+            $id_mhs = DB::table('mahasiswa_kp')->where('id_mahasiswa', $user['id'])->value('id');
+            $harian_mahasiswas = KegiatanHarian::all()->where('id_mhs', '=', $id_mhs);
+            
+        
+
+          // dd( $harian_mahasiswas);
+            // dd( $harians);
+            // $harian_mhs = DB::table('kegiatan_harian')->where('id', $user['id'])->value('id');
+            // dd($harian_mhs);
+            return view('mahasiswa.kegiatanharian.index_harian', compact('kegiatan_harians', 'user','mahasiswa_kp','harian_mahasiswas','harians'));
         
     }
 
@@ -50,7 +60,7 @@ class KegiatanHarianController extends Controller
         $kegiatan_harian = new KegiatanHarian();
         $kegiatan_harian->hari_tanggal = $request->input('hari_tanggal');
         $kegiatan_harian->kegiatan = $request->input('kegiatan');
-        $kegiatan_harian->id = $request->input('id');
+        $kegiatan_harian->id_mhs= $request->input('id');
         
         if($kegiatan_harian->save())
         {

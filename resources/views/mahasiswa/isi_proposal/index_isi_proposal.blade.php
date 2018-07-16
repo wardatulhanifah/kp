@@ -37,6 +37,7 @@
 							<td class="text-center">
 								<a href=" {{route('proposal.show', [$proposal->id])}} " class="btn btn-sm btn-outline-info"><i class="fa fa-eye"></i></a>
 								<a href=" {{route('proposal.edit', [$proposal->id])}} " class="btn btn-sm btn-outline-warning"><i class="fa fa-pencil"></i></a>
+								<a href=" {{route('tambah_anggota.add', [$proposal->id])}} " class="btn btn-sm btn-outline-success"><i class="fa fa-user-plus""></i></a>
 								<button onclick = "event.preventDefault();confirmDelete('{{ route('proposal.destroy', [$proposal->id]) }}');" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
 							</td>
 						</tr>

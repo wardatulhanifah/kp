@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePeminjamanStatusesTable extends Migration
+class CreateHarianTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreatePeminjamanStatusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('peminjaman_status', function (Blueprint $table) {
+        Schema::create('harian', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nama');
+            $table->date('hari_tanggal');
+            $table->string('kegiatan');
+            $table->string('catatan');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ class CreatePeminjamanStatusesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('peminjaman_status');
+        Schema::dropIfExists('harian');
     }
 }

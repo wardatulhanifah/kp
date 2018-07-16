@@ -37,6 +37,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('instansi', 'InstansiController');
     Route::resource('dosen','DosenController');
     Route::resource('proposal','ProposalController');
+    Route::get('tambah_anggota','ProposalController@tambah_anggota')->name('tambah_anggota.add');
+    Route::post('tambah_anggota','ProposalController@storedata')->name('tambah_anggota.storedata');
+    Route::delete('hapus_anggota/{id}','ProposalController@hapus_anggota')->name('tambah_anggota.hapus_anggota');
     // Route::get('registrasi','ProposalController@isidata')->name('registrasi.create');
     // Route::post('registrasi','ProposalController@storedata')->name('registrasi.storedata');
     Route::resource('harian','KegiatanHarianController');

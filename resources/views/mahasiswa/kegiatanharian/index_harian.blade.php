@@ -14,16 +14,16 @@
 
             {!! Form::open(['route' => 'harian.store', 'method' => 'post', 'files' => 'true', 'enctype' => 'multipart/form-data']) !!}
 
-            <div class="card-header">
-                <i class="fa fa-align-justify"> Tambah Kegiatan Harian</i>
+           <div class="card-header">
+                <i class="fa fa-align-justify"> Kegiatan Harian </i>
             </div>
 
             <div class="card-body">
 
                 @include('mahasiswa.kegiatanharian._form')
                 
+                
             </div>
-
             <div class="card-footer">
                 <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Simpan</button>
                 
@@ -36,7 +36,7 @@
     <div class="col-md-12">
         <div class="card" style="overflow-x: auto">
             <div class="card-header">
-                <i class="fa fa-align-justify"></i> Daftar kegiatan harian
+                <i class="fa fa-align-justify"></i> Daftar Kegiatan Harian
             </div>
 
             <div class="card-body">
@@ -46,22 +46,17 @@
                            
                             <th class="text-center">Hari/Tanggal</th>
                             <th class="text-center">Kegiatan</th>
-                            <th class="text-center">Aksi</th>
                             
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($kegiatan_harians as $kegiatan_harian)
+                        @foreach($harian_mahasiswas as $harian_mahasiswas)
                         <tr>
                            
-                            <td> {{ $kegiatan_harian->hari_tanggal }} </td>
-                            <td> {{ $kegiatan_harian->kegiatan }} </td>
+                            <td> {{ $harian_mahasiswas->hari_tanggal }} </td>
+                            <td> {{ $harian_mahasiswas->kegiatan}} </td>
                             
-                            <td class="text-center">
-                                <a href=" {{route('harian.show', [$kegiatan_harian->id])}} " class="btn btn-sm btn-outline-info"><i class="fa fa-eye"></i></a>
-                                <a href=" {{route('harian.edit', [$kegiatan_harian->id])}} " class="btn btn-sm btn-outline-warning"><i class="fa fa-pencil"></i></a>
-                                <button onclick = "event.preventDefault();confirmDelete('{{ route('harian.destroy', [$kegiatan_harian->id]) }}');" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
-                            </td>
+                           
                         </tr>
                         @endforeach
                     </tbody>

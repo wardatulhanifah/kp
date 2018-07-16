@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\User;
-use App\Instansi;
+use App\Instansi; 
+use App\Mahasiswa; 
+use App\MahasiswaKP; 
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
@@ -21,45 +23,7 @@ class proposalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function isidata()
-    {
-        if(Auth::user()->can('isi_proposal')){
-            $proposals = Proposal::paginate(10);
-             $instansi = Instansi::all()->pluck('nama', 'id');
-
-            return view('mahasiswa.isi_proposal.create_data', compact('proposals','instansi'));
-        }
-    }
-
-    public function storedata(Request $request)
-    {
-          $request->validate([
-            // 'instansi' => 'required',
-            'mulai_kp'       => 'required',
-            'selesai_kp'       => 'required'
-            
-            
-        ]);
-
-        $proposal                 = new Proposal();
-        
-        $proposal->mulai_kp           = $request->input('mulai_kp');
-        $proposal->selesai_kp  = $request->input('selesai_kp');
- 
-        
-        if($proposal->save())
-        {
-            toast()->success('Data proposal berhasil ditambahkan');
-           
-            return redirect()->route('proposal.create');
-        }
-        else
-        {
-            toast()->error('Data proposal gagal ditambahkan');
-            return redirect()->route('registrasi.create');
-        }
-    }
-
+   
 
     public function index()
     {
@@ -115,6 +79,10 @@ class proposalController extends Controller
         
         if($proposal->save())
         {
+            $mahasiswa_kp = new MahasiswaKP();
+            $mahasiswa_kp->id_mahasiswa= Auth::user()->id;
+            $mahasiswa_kp->id_proposal=$proposal->id;
+            $mahasiswa_kp->save();
             toast()->success('Data proposal berhasil ditambahkan');
            
             return redirect()->route('proposal.index');
@@ -204,4 +172,87 @@ class proposalController extends Controller
 
         return redirect()->route('proposal.index');
     }
+
+    public function tambah_anggota()
+
+    {
+        $user = Auth::user();
+        $mahasiswa_kp = new MahasiswaKP();
+        $proposals = Proposal::all();
+        $mahasiswas = Mahasiswa::all();
+        $mahasiswa = Mahasiswa::all()->pluck('nama', 'id');
+
+
+        //dd($user['id']);
+        $id_proposal = DB::table('mahasiswa_kp')->where('id_mahasiswa', $user['id'])->value('id_proposal');
+        $id_anggotas = MahasiswaKP::all()->where('id_proposal', '=', $id_proposal);
+        $anggotas = array();
+        dd($id_anggotas);
+        //dd($mahasiswas);
+        foreach ($mahasiswas as $key => $value) {
+            foreach ($id_anggotas as $k => $v) {
+                if ($id_anggotas[$k]->id_mahasiswa == $mahasiswas[$key]->id) {
+                    $anggotas[$key]['id'] = $id_anggotas[$k]->id;
+                    $anggotas[$key]['id_mhs'] = $mahasiswas[$key]->id;
+                    $anggotas[$key]['nim'] = $mahasiswas[$key]->nim;
+                    $anggotas[$key]['nama'] = $mahasiswas[$key]->nama;
+                }
+            }
+        }
+        //dd($anggotas);
+        //dd($id_anggotas[1]->id_mahasiswa);
+
+        return view('mahasiswa.isi_proposal.tambah_anggota', compact('mahasiswa', 'id_proposal', 'anggotas','mahasiswa_kp'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storedata(Request $request)
+    {
+          $request->validate([
+            'id' => 'required',
+            'mahasiswa'       => 'required',
+            
+        ]);
+        
+        //$id_instansi =  DB::table('instansi')->where('nama',  trim($request->input('instansi')))->pluck('id')->first();
+        //dd($id_instansi);
+        //dd(trim($request->input('instansi')));
+
+        $mahasiswa_kp = new MahasiswaKP();
+            $mahasiswa_kp->id_mahasiswa= $request->input('mahasiswa');
+            $mahasiswa_kp->id_proposal=$request->input('id');
+            $mahasiswa_kp->save();
+
+       
+        
+        if($mahasiswa_kp->save())
+        {
+            toast()->success('Anggota berhasil ditambahkan');
+           
+            return redirect()->route('proposal.index');
+        }
+        else
+        {
+            toast()->error('Anggota gagal ditambahkan');
+            return redirect()->route('proposal.create');
+        }
+    }
+
+    public function hapus_anggota($id)
+    {
+        $mahasiswa_kp = MahasiswaKP::find($id);
+        // dd($mahasiswa_kp);
+        $mahasiswa_kp->delete();
+       
+        toast()->success('anggota berhasil dihapus');
+
+        return redirect()->route('tambah_anggota.add');
+
+    }
+
 }

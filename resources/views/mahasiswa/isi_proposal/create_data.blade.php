@@ -25,7 +25,7 @@
 
             <div class="card-footer">
                 <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Simpan</button>
-                <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+                <button type="button" href="{{ route('tambah_anggota.add') }}" class="btn">Tambah Anggota</button>
             </div>
 
             {{ Form::close() }}
