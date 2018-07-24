@@ -27,29 +27,28 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach($proposals as $proposal)
+						@foreach($mhs_kps as $id_anggota)
 						<tr>
-							<td> {{ $proposal->id}} </td>
-							<td> {{ $proposal->judul }} </td>
-							<td> {{ $proposal->instansi['nama'] }} </td>
-							<td> {{ $proposal->status_p['status']}} </td>
-							
+							<td> {{ $id_anggota->id}} </td>
+							<td> {{ $id_anggota->proposal->judul }} </td>
+							<td> {{ $id_anggota->proposal->instansi->nama }} </td>
+							<td> {{ optional($id_anggota->proposal->status_p)->status }} </td>
 							<td class="text-center">
-								<a href=" {{route('proposal.show', [$proposal->id])}} " class="btn btn-sm btn-outline-info"><i class="fa fa-eye"></i></a>
-								<a href=" {{route('proposal.edit', [$proposal->id])}} " class="btn btn-sm btn-outline-warning"><i class="fa fa-pencil"></i></a>
-								<a href=" {{route('tambah_anggota.add', [$proposal->id])}} " class="btn btn-sm btn-outline-success"><i class="fa fa-user-plus""></i></a>
-								<button onclick = "event.preventDefault();confirmDelete('{{ route('proposal.destroy', [$proposal->id]) }}');" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
+								<a href=" {{route('proposal.show', [$id_anggota->id])}} " class="btn btn-sm btn-outline-info"><i class="fa fa-eye"></i></a>
+								<a href=" {{route('proposal.edit', [$id_anggota->id])}} " class="btn btn-sm btn-outline-warning"><i class="fa fa-pencil"></i></a>
+								<a href=" {{route('tambah_anggota.add', [$id_anggota->id])}} " class="btn btn-sm btn-outline-success"><i class="fa fa-user-plus"></i></a>
+								<a href=" {{route('selesai.mhs', [$id_anggota->id])}} " class="btn btn-sm btn-outline-info"><i class="fa fa-file-o"></i></a>
+								<button onclick = "event.preventDefault();confirmDelete('{{ route('proposal.destroy', [$id_anggota->id]) }}');" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></button>
 							</td>
+							
 						</tr>
 						@endforeach
 					</tbody>
 				</table>
 				
 			</div>
-			<div class="card-footer">
-				{{ $proposals->links() }}
-			</div>
-		</div>
+			
+			
 	</div>
 </div>
 

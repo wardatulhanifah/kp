@@ -21,7 +21,7 @@
             <div class="card-body">
                 <div class="form-group">
                     <label for="id"></label>
-                    {{ Form::hidden('id', $id_proposal, ['class' => 'form-control'])}}
+                    {{ Form::hidden('id', $proposal->id, ['class' => 'form-control'])}}
                 <!-- {!! Form::input('hari_tanggal','start_date',date('Y-m-d'),['class' => 'form-control','disabled'=>true]) !!} -->
                 </div>
 
@@ -63,11 +63,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($anggotas as $anggota)
-                        <tr>
-                            <td> {{ $anggota['nim'] }} </td>
-                            <td> {{ $anggota['nama'] }} </td>
-
+                         @foreach($anggotas as $anggota)
+                                             
+                                            <tr>
+                                                <td>{{ optional($anggota->mahasiswa_kp)->nim }} </td>
+                                                <td>{{ optional($anggota->mahasiswa_kp)->nama }} </td>
+                                           
 
                             <td class="text-center">
                               

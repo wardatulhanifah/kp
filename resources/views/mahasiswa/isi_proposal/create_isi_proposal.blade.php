@@ -25,13 +25,8 @@
 
             <div class="card-footer">
                 <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Simpan</button>
-                <button class="btn btn-default" href="{{ route('tambah_anggota.add') }}">Tambah Anggota</button>
                 
-                <!-- <button class="btn btn-default" href="{{ route('tambah_anggota.add') }}">Default</button>
-                <button class="btn" href="{{ route('tambah_anggota.add') }}"><i class="icon-list"></i> Tambah Anggota </button> -->
-                 <!-- <button type="button" href="{{ route('tambah_anggota.add') }}" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Simpan</button>
-                <button class="btn" href="{{ route('tambah_anggota.add') }}"><i class="icon-list"></i> List </button>
-                 -->
+                
               
             </div>
 

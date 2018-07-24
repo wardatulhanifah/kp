@@ -37,12 +37,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('instansi', 'InstansiController');
     Route::resource('dosen','DosenController');
     Route::resource('proposal','ProposalController');
-    Route::get('tambah_anggota','ProposalController@tambah_anggota')->name('tambah_anggota.add');
+    Route::get('tambah_anggota/{id}','ProposalController@tambah_anggota')->name('tambah_anggota.add');
+    Route::get('selesai','ProposalController@selesai_kp')->name('selesai.add');
     Route::post('tambah_anggota','ProposalController@storedata')->name('tambah_anggota.storedata');
     Route::delete('hapus_anggota/{id}','ProposalController@hapus_anggota')->name('tambah_anggota.hapus_anggota');
+    Route::resource('selesai','MahasiswaKPController');
+    Route::get('selesai/mahasiswakp/{id}','MahasiswaKPController@selesai')->name('selesai.mhs');
+    Route::post('selesai/mahasiswakp/{id}','MahasiswaKPController@selesaiSave')->name('selesai.kp');
     // Route::get('registrasi','ProposalController@isidata')->name('registrasi.create');
     // Route::post('registrasi','ProposalController@storedata')->name('registrasi.storedata');
     Route::resource('harian','KegiatanHarianController');
+    
     // Route::get('kegiatan_harian','KegiatanHarianController@create')->name('kegiatan_harian.create');
 });
 

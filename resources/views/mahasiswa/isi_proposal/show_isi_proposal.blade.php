@@ -3,7 +3,8 @@
 {{-- Menu Breadcrumb --}}
 @section('breadcrumb')
 	<a class="btn" href="{{ route('proposal.destroy', [ $proposal->id ]) }}" onclick="event.preventDefault();confirmDelete();"><i class="icon-trash"></i> Hapus</a>
-	<a class="btn" href="{{ route('proposal.edit', [$proposal->id]) }}"><i class="icon-list"></i> Edit</a>
+	<a class="btn" href="{{ route('tambah_anggota.add', [$proposal->id]) }}"><i class="icon-list"></i> Edit Anggota</a>
+	<a class="btn" href="{{ route('proposal.edit', [$proposal->id]) }}"><i class="icon-list"></i> Edit Proposal</a>
 	<a class="btn" href="{{ route('proposal.index') }}"><i class="icon-list"></i> List</a>
 
 	<form style="display: none" action=" {{route('proposal.destroy', [$proposal->id])}} " method="post" id="form-delete">
@@ -38,16 +39,28 @@
 							<div class="col-md-9">
 								<p class="col-form-label">
 									: {{Auth::user()->biodata->nim}}
-								</p>
+								</p> 
 							</div>
 						</div>
 						<div class="form-group row">
 							<label class="col-md-3 col-form-label"> Anggota Kelompok</label>
 							<div class="col-md-9">
-								<p class="col-form-label">
+							
 									
-									
-								</p>
+									<table  border="0">
+					                    <thead>
+					                      : 
+					                    </thead>
+					                    <tbody>
+					                        @foreach($anggotas as $anggota)
+					                         
+					                        <tr>
+					                            <td>{{ optional($anggota->mahasiswa_kp)->nama }} </td>
+					                        </tr>
+					                        @endforeach
+					                    </tbody>
+					                </table>
+								
 							</div>
 						</div>
 						<div class="form-group row">

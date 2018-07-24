@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+ 
 use App\Proposal;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -29,10 +29,44 @@ class proposalController extends Controller
     {
         if(Auth::user()->can('isi_proposal')){
             $proposals = Proposal::paginate(10);
+            $user = Auth::user();
+      
+            $instansi = Instansi::all()->pluck('nama', 'id');
+            $mahasiswa_kp = new MahasiswaKP();
+            $proposals = Proposal::all();
+            $mahasiswas = Mahasiswa::all();
+            $mahasiswa = Mahasiswa::all()->pluck('nama', 'id');
+
+
+        //dd($user['id']);
+            $mhs_kps= MahasiswaKP::with('proposal')->where('id_mahasiswa', $user['id'])->get();
+            // dd($mhs_kps);
+        
+         //    $id_anggotas = Proposal::all()->where('id_proposal', '=', $id_proposal);
+         // // dd($id_anggotas);
+        // $anggotas = array();
+        // // dd($anggotas);
+        // //dd($mahasiswas);
+        // foreach ($proposals as $key => $value) {
+        //     foreach ($id_anggotas as $k => $v) {
+        //         if ($id_anggotas[$k]->id_proposal == $proposals[$key]->id) {
+        //             $anggotas[$key]['id'] = $id_anggotas[$k]->id;
+        //             $anggotas[$key]['id_mhs'] = $mahasiswas[$key]->id;
+        //             $anggotas[$key]['nim'] = $mahasiswas[$key]->nim;
+        //             $anggotas[$key]['nama'] = $mahasiswas[$key]->nama;
+        //         }
+        
+
+
+
+
+
        
-            return view('mahasiswa.isi_proposal.index_isi_proposal', compact('proposals'));
-        }
+            return view('mahasiswa.isi_proposal.index_isi_proposal', compact('proposals','mhs_kps'));
+        }   
     }
+    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -103,10 +137,28 @@ class proposalController extends Controller
     public function show($id)
 
     {
-        $instansi = Instansi::all()->pluck('nama', 'id');
-         $proposal= Proposal::find($id);
 
-        return view('mahasiswa.isi_proposal.show_isi_proposal',compact('proposal','instansi'));
+        $user = Auth::user();
+
+       
+        // $instansi = Instansi::all()->pluck('nama', 'id');
+         $mahasiswa_kp= MahasiswaKP::with('proposal.mahasiswas')->find($id);
+       
+         $proposal=$mahasiswa_kp->proposal;
+         $instansi=$proposal->intansi;
+         $anggotas=$proposal->mahasiswas;
+         // dd($anggotas);
+           // dd($proposal->mahasiswas);
+        // $proposals = Proposal::all();
+        // $mahasiswas = Mahasiswa::all();
+        // $mahasiswa = Mahasiswa::all()->pluck('nama', 'id');
+
+
+        //dd($user['id']);
+        
+        
+
+        return view('mahasiswa.isi_proposal.show_isi_proposal',compact('proposal','instansi','anggotas','mahasiswa_kp'));
 
     }
 
@@ -162,47 +214,73 @@ class proposalController extends Controller
      */
     public function destroy($id)
     {
-        $proposal = proposal::find($id);
-        $proposal->delete();
-        $user = User::find($id);
+        $mahasiswa_kp= MahasiswaKP::with('proposal.mahasiswas')->find($id);
+       
+         // $proposal=$mahasiswa_kp->proposal;
+         // $instansi=$proposal->intansi;
+         // $anggotas=$proposal->mahasiswas;
+
+         $mahasiswa_kp->delete();
+        // $proposal = proposal::find($id);
+        // $proposal->delete();
+        // $user = User::find($id);
         
 
-        $user->delete();
+        // $user->delete();
         toast()->success('Data proposal berhasil dihapus');
 
         return redirect()->route('proposal.index');
     }
 
-    public function tambah_anggota()
+    public function tambah_anggota($id)
 
     {
-        $user = Auth::user();
-        $mahasiswa_kp = new MahasiswaKP();
-        $proposals = Proposal::all();
-        $mahasiswas = Mahasiswa::all();
-        $mahasiswa = Mahasiswa::all()->pluck('nama', 'id');
+      
+         $user = Auth::user();
+         $mahasiswa = Mahasiswa::all()->pluck('nama', 'id');
+
+       
+        // $instansi = Instansi::all()->pluck('nama', 'id');
+         $mahasiswa_kp= MahasiswaKP::with('proposal.mahasiswas')->find($id);
+       
+         
+         // $id_proposal=$mahasiswa_kp->
+       
+         $proposal=$mahasiswa_kp->proposal;
+         // dd($proposal->id);
+
+         $instansi=$proposal->intansi;
+         $anggotas=$proposal->mahasiswas;
+
+
+        // $user = Auth::user();
+        // $mahasiswa_kp = new MahasiswaKP();
+        // $proposals = Proposal::all();
+        
+        // $mahasiswa = Mahasiswa::all()->pluck('nama', 'id');
 
 
         //dd($user['id']);
-        $id_proposal = DB::table('mahasiswa_kp')->where('id_mahasiswa', $user['id'])->value('id_proposal');
-        $id_anggotas = MahasiswaKP::all()->where('id_proposal', '=', $id_proposal);
-        $anggotas = array();
-        dd($id_anggotas);
-        //dd($mahasiswas);
-        foreach ($mahasiswas as $key => $value) {
-            foreach ($id_anggotas as $k => $v) {
-                if ($id_anggotas[$k]->id_mahasiswa == $mahasiswas[$key]->id) {
-                    $anggotas[$key]['id'] = $id_anggotas[$k]->id;
-                    $anggotas[$key]['id_mhs'] = $mahasiswas[$key]->id;
-                    $anggotas[$key]['nim'] = $mahasiswas[$key]->nim;
-                    $anggotas[$key]['nama'] = $mahasiswas[$key]->nama;
-                }
-            }
-        }
+        // $id_proposal = DB::table('mahasiswa_kp')->where('id_mahasiswa', $user['id'])->value('id_proposal');
+        // $id_anggotas = MahasiswaKP::all()->where('id_proposal', '=', $id_proposal);
+        // $anggotas = array();
+        // // dd($id_anggotas);
+        // //dd($mahasiswas);
+
+        // foreach ($mahasiswas as $key => $value) {
+        //     foreach ($id_anggotas as $k => $v) {
+        //         if ($id_anggotas[$k]->id_mahasiswa == $mahasiswas[$key]->id) {
+        //             $anggotas[$key]['id'] = $id_anggotas[$k]->id;
+        //             $anggotas[$key]['id_mhs'] = $mahasiswas[$key]->id;
+        //             $anggotas[$key]['nim'] = $mahasiswas[$key]->nim;
+        //             $anggotas[$key]['nama'] = $mahasiswas[$key]->nama;
+        //         }
+        //     }
+        // }
         //dd($anggotas);
         //dd($id_anggotas[1]->id_mahasiswa);
 
-        return view('mahasiswa.isi_proposal.tambah_anggota', compact('mahasiswa', 'id_proposal', 'anggotas','mahasiswa_kp'));
+        return view('mahasiswa.isi_proposal.tambah_anggota', compact('mahasiswa', 'id_proposal', 'anggotas','mahasiswa_kp','proposal'));
     }
 
     /**
@@ -228,30 +306,65 @@ class proposalController extends Controller
             $mahasiswa_kp->id_proposal=$request->input('id');
             $mahasiswa_kp->save();
 
-       
+        $mahasiswa_kp= MahasiswaKP::with('proposal.mahasiswas')->find($mahasiswa_kp->id_proposal);
+        $proposal=$mahasiswa_kp->proposal;
+        $mahasiswa = Mahasiswa::all()->pluck('nama', 'id');
+        $anggotas=$proposal->mahasiswas;
+        //dd($mahasiswa_kp->id);
+        //dd(Auth::user()->id);
+        $id = DB::table('mahasiswa_kp')->where('id_mahasiswa', Auth::user()->id)->where('id_proposal', $mahasiswa_kp->id)->value('id');
+        //$id = MahasiswaKP::where('id_mahasiswa', Auth::user()->id)->where('id_proposal', $mahasiswa_kp->id)->get('id');
+        // dd($id);
+
         
         if($mahasiswa_kp->save())
         {
             toast()->success('Anggota berhasil ditambahkan');
-           
-            return redirect()->route('proposal.index');
+            // return redirect()->route('tambah_anggota.add', compact('proposal','mahasiswa','anggotas', ''));
+           return redirect()->route('tambah_anggota.add', [$id]);
+
+            // return view('mahasiswa.isi_proposal.tambah_anggota', compact('proposal','mahasiswa','anggotas'));
         }
         else
         {
             toast()->error('Anggota gagal ditambahkan');
-            return redirect()->route('proposal.create');
+            return redirect()->route('tambah_anggota.add', [$id_anggota->id]);
+
+            
         }
     }
 
     public function hapus_anggota($id)
     {
+        $mahasiswa_kp= MahasiswaKP::with('proposal.mahasiswas')->find($id);
         $mahasiswa_kp = MahasiswaKP::find($id);
-        // dd($mahasiswa_kp);
+        $proposal=$mahasiswa_kp->proposal;
+        $anggotas=$proposal->mahasiswas;
+        //dd([$anggotas, $proposal, $mahasiswa_kp]);
         $mahasiswa_kp->delete();
-       
+        $id = DB::table('mahasiswa_kp')->where('id_mahasiswa', Auth::user()->id)->where('id_proposal', $proposal->id)->value('id');
+       //dd($id);
         toast()->success('anggota berhasil dihapus');
 
-        return redirect()->route('tambah_anggota.add');
+        return redirect()->route('tambah_anggota.add', [$id]);
+
+    }
+
+    public function selesai_kp(Instansi $instansi)
+    {
+
+        $user = Auth::user();
+       
+      
+         $mahasiswa_kp = new MahasiswaKP();
+      
+        $mahasiswas = Mahasiswa::all();
+        $mahasiswa = Mahasiswa::all()->pluck('nama', 'id');
+
+// dd($proposal->instansi['nama']);
+       
+        $mahasiswa = Mahasiswa::all()->pluck('nama', 'id');
+        return view('mahasiswa.mahasiswakp.selesai', compact('instansi','mahasiswa','proposal'));
 
     }
 
